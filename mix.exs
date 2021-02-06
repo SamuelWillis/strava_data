@@ -33,8 +33,10 @@ defmodule StravaData.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:phoenix, "~> 1.5.6"},
       {:phoenix_ecto, "~> 4.1"},
+      {:oauth2, "~> 2.0"},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_view, "~> 0.14.6"},

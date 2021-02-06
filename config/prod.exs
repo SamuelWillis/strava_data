@@ -1,5 +1,7 @@
 use Mix.Config
 
+config :strava_data, :env, :prod
+
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
 # when generating URLs.
@@ -10,8 +12,18 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :strava_data, StravaDataWeb.Endpoint,
-  url: [host: "example.com", port: 80],
+  # Possibly not needed, but doesn't hurt
+  http: [port: {:system, "PORT"}],
+  url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
+  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
+  server: true,
   cache_static_manifest: "priv/static/cache_manifest.json"
+
+config :strava_data, StravaData.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: System.get_env("DATABASE_URL"),
+  ssl: true,
+  pool_size: 2
 
 # Do not print debug messages in production
 config :logger, level: :info

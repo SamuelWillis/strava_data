@@ -1,0 +1,12 @@
+# App name used by Gigalixir
+export APP_NAME=
+
+# DB
+export DB_USER=
+export DB_NAME=
+export DB_PASSWORD=
+export HOSTNAME=
+
+# Strava 
+export STRAVA_CLIENT_ID=
+export STRAVA_CLIENT_SECRET=

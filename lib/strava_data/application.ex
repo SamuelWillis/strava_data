@@ -14,9 +14,10 @@ defmodule StravaData.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: StravaData.PubSub},
       # Start the Endpoint (http/https)
-      StravaDataWeb.Endpoint
+      StravaDataWeb.Endpoint,
       # Start a worker by calling: StravaData.Worker.start_link(arg)
       # {StravaData.Worker, arg}
+      {Task.Supervisor, name: StravaData.Athletes.AthleteSupervisor}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

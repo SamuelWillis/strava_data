@@ -24,6 +24,7 @@ defmodule StravaData.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import StravaData.DataCase
+      import StravaData.Factory
     end
   end
 

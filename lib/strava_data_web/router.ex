@@ -1,6 +1,8 @@
 defmodule StravaDataWeb.Router do
   use StravaDataWeb, :router
 
+  alias StravaDataWeb.Plugs
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -15,9 +17,24 @@ defmodule StravaDataWeb.Router do
   end
 
   scope "/", StravaDataWeb do
-    pipe_through :browser
+    pipe_through([:browser, Plugs.EnsureToken])
 
     live "/", PageLive, :index
+  end
+
+  scope "/signup", StravaDataWeb do
+    pipe_through([:browser, Plugs.EnsureNoToken])
+
+    live "/", SignUpLive, :index
+  end
+
+  scope "/api", StravaDataWeb do
+    pipe_through(:api)
+
+    scope path: "/auth" do
+      get "/", AuthController, :auth
+      get "/callback", AuthController, :callback
+    end
   end
 
   # Other scopes may use custom stacks.
@@ -38,6 +55,18 @@ defmodule StravaDataWeb.Router do
     scope "/" do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: StravaDataWeb.Telemetry
+    end
+  end
+
+  def ensure_no_athelete_token(conn, _opts) do
+    case get_session(conn, :token) do
+      token when is_binary(token) ->
+        conn
+
+      _ ->
+        conn
+        |> Phoenix.Controller.redirect(to: "/signup")
+        |> halt()
     end
   end
 end

@@ -1,4 +1,6 @@
 defmodule StravaDataWeb.ConnCase do
+  alias StravaData.Factory
+
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -39,5 +41,15 @@ defmodule StravaDataWeb.ConnCase do
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  def insert_athlete_and_set_session_token(%{conn: conn}) do
+    athlete = Factory.insert(:athlete_with_tokens)
+
+    token = Phoenix.Token.sign(StravaDataWeb.Endpoint, "athlete auth", athlete.id)
+
+    conn = Phoenix.ConnTest.init_test_session(conn, %{token: token})
+
+    %{conn: conn, athlete: athlete}
   end
 end
